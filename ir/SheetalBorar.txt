@@ -1,0 +1,25 @@
+QUERY_ID=1,	DOC_ID= Biological_Systems_Engineering, RELEVANCE_SCORE =0
+QUERY_ID=2,	DOC_ID= Candidate_Statements, RELEVANCE_SCORE =0
+QUERY_ID=3,	DOC_ID= Computer_Science, RELEVANCE_SCORE =1
+QUERY_ID=4,	DOC_ID= document_translated, RELEVANCE_SCORE =0
+QUERY_ID=5,	DOC_ID= ECE_Course_Reviews, RELEVANCE_SCORE =2
+QUERY_ID=23, DOC_ID= Economics, RELEVANCE_SCORE =1
+QUERY_ID=6,	DOC_ID= Elaine_Kasimatis, RELEVANCE_SCORE =1
+QUERY_ID=7,	DOC_ID= Evelyn_Silvia, RELEVANCE_SCORE =2
+QUERY_ID=8,	DOC_ID= Events_Calendars, RELEVANCE_SCORE =0
+QUERY_ID=9, DOC_ID= Fiber_and_Polymer_Science, RELEVANCE_SCORE =0
+QUERY_ID=10, DOC_ID= Graduate_Groups, RELEVANCE_SCORE =2
+QUERY_ID=11, DOC_ID= Hydrology, RELEVANCE_SCORE =0
+QUERY_ID=12, DOC_ID= Mathematics, RELEVANCE_SCORE =3
+QUERY_ID=13, DOC_ID= MattHh, RELEVANCE_SCORE =0
+QUERY_ID=14, DOC_ID= Private_Tutoring, RELEVANCE_SCORE =1
+QUERY_ID=15, DOC_ID= Quantitative_Biology_and_Bioinformatics, RELEVANCE_SCORE =0
+QUERY_ID=16, DOC_ID= Statistics, RELEVANCE_SCORE =3
+QUERY_ID=17, DOC_ID= Student_Organizations, RELEVANCE_SCORE =0
+QUERY_ID=18, DOC_ID= UC_Davis_English_Department, RELEVANCE_SCORE =0
+QUERY_ID=19, DOC_ID= UCD_Honors_and_Prizes, RELEVANCE_SCORE =1
+QUERY_ID=20, DOC_ID= University_Departments, RELEVANCE_SCORE =1
+QUERY_ID=21, DOC_ID= What_I_Wish_I_Knew...Before_Coming_to_UC_Davis_Entomology, RELEVANCE_SCORE =1
+QUERY_ID=22, DOC_ID= Wildlife%2C_Fish%2C_and_Conservation_Biology, RELEVANCE_SCORE =0
+
+
