@@ -199,13 +199,10 @@ public class HashedIndex implements Index {
             if(query.size() == 1) {
                 String token = query.terms.getFirst();
                  PostingsList termPostingsList = getPostings(token);
-                 //double tf_idf_query=1;//*Math.log10(termPostingsList.list.size()/N);
                  for(int i = 0 ; i < termPostingsList.list.size() ; i++){//docids of the postingslist
                     String docID = termPostingsList.list.get(i).docID+"";
                     double tf = termPostingsList.list.get(i).tf()/docLengths.get(docID);
-                    //double idf = Math.log10(N/termPostingsList.list.size());
-                    //double tf_idf_doc = tf*idf;
-                    termPostingsList.list.get(i).score=tf;//_doc*Math.log10(N);
+                    termPostingsList.list.get(i).score=tf;
                  }
                  Collections.sort(termPostingsList.list,PostingsEntry.PostingsEntryComparator);
                  return termPostingsList;
@@ -221,40 +218,37 @@ public class HashedIndex implements Index {
                    else{//add in hashmap
                         queryTf.put(token, 1.0);
                    }
-                   PostingsList termPostingsList = getPostings(token);//get the postings lsit of taht token
+                }
+                Set<String> keys = queryTf.keySet();
+                String[] uniqueQueryTermList = keys.toArray(new String[keys.size()]);
+                for(int i = 0;i < uniqueQueryTermList.length;i++){
+                    String token = query.terms.get(i);
+                    PostingsList termPostingsList = getPostings(token);//get the postings lsit of taht token
                    double idf = Math.log10(N / termPostingsList.list.size());
                    queryTf.put(token,queryTf.get(token)*idf);//put tf*idf in querytf
                 }
-
                 /*
                 so we need to check similarity for all documents containing any of the three words so we nned to loop through the postings lists of all unique words in the query
                 */
                 //similarity hashmap of docid of the query terms
                 //need to calculate the tfs of all the query terms in one docid
                 PostingsList result = new PostingsList();
-                Set<String> keys = queryTf.keySet();
-                String[] uniqueQueryTermList = keys.toArray(new String[keys.size()]);
                 HashMap<Integer,Double> similarity = new HashMap<Integer,Double>();
                 for(int i = 0 ; i < uniqueQueryTermList.length ; i++){//going through all unique query words
                     String token = uniqueQueryTermList[i];
-                    PostingsList termPostingsList = getPostings(token);
-                   // double dotProduct=queryTf.get(token);
-                    for(int j = 0 ; j < termPostingsList.list.size() ; j++){//go through the query word's docids
-                        //for each docid we compute the tf idf score
+                    PostingsList termPostingsList = getPostings(token);// double dotProduct=queryTf.get(token);
+                    for(int j = 0 ; j < termPostingsList.list.size() ; j++){//for each docid we compute the tf idf score
                         int docId = termPostingsList.list.get(j).docID;
-                        //System.out.print(docId);
                         if(similarity.containsKey(docId)){
                             continue;
                         }
                         else{
-                            double tfIdfDocTerm, tfIdfQueryTerm, magnitudeQueryVector=0, magnitudeDocVector=0, numerator=0;
-                            for(int k = 0 ; k < uniqueQueryTermList.length ; k++){
-                                //to calculate the cosine similarity we need the tfidf of a word in document and in query, we are in the document right now, tf idf of the the first word in query is just
+                            double tfIdfDocTerm, tfIdfQueryTerm, numerator=0;
+                            for(int k = 0 ; k < uniqueQueryTermList.length ; k++){//to calculate the cosine similarity we need the tfidf of a word in document and in query
                                 String ithTerm = uniqueQueryTermList[k];
                                 tfIdfQueryTerm = queryTf.get(ithTerm);
                                 tfIdfDocTerm = tfidf(ithTerm,docId);
                                 numerator = numerator + tfIdfDocTerm*tfIdfQueryTerm;
-                                
                             }
                             double cosine = numerator/(docLengths.get(""+docId)*query.terms.size());
                             similarity.put(docId,cosine);
@@ -265,7 +259,6 @@ public class HashedIndex implements Index {
                 }
                 Collections.sort(result.list,PostingsEntry.PostingsEntryComparator);
                 return result;
-                
             }
         }
         else {

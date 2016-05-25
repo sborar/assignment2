@@ -33,13 +33,11 @@ public class PostingsEntry implements Comparable<PostingsEntry>, Serializable {
     public int compareTo( PostingsEntry other ) {
         return Double.compare( score, other.score );
         }
-
     public static Comparator<PostingsEntry> PostingsEntryComparator=new Comparator<PostingsEntry>(){
         public int compare(PostingsEntry x, PostingsEntry y){
             return y.compareTo(x);
         }
     }; 
-    
     public double tf(){
          
         return offsetList.size();

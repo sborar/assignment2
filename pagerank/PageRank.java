@@ -9,7 +9,6 @@ import java.util.*;
 import java.io.*;
 
 public class PageRank{
-
     /**  
      *   Maximal number of documents. We're assuming here that we
      *   don't have more docs than we can keep in main memory.
@@ -66,13 +65,15 @@ public class PageRank{
      *   of whether the transistion probabilities converge or not.
      */
     final static int MAX_NUMBER_OF_ITERATIONS = 1000;
-
+    // declare probability matrix
+    
     
     /* --------------------------------------------- */
 
 
     public PageRank( String filename ) {
 	int noOfDocs = readDocs( filename );
+
 	computePagerank( noOfDocs );
     }
 
@@ -89,8 +90,8 @@ public class PageRank{
      *
      *   @return the number of documents read.
      */
+    int fileIndex = 0;
     int readDocs( String filename ) {
-	int fileIndex = 0;
 	try {
 	    System.err.print( "Reading file... " );
 	    BufferedReader in = new BufferedReader( new FileReader( filename ));
@@ -152,8 +153,23 @@ public class PageRank{
 
 
     /* --------------------------------------------- */
-
-
+    double dist(double[] x,double[] y, int numberOfDocs){
+        double dist=0.0;
+        for(int i = 0; i < numberOfDocs; i++){
+            dist = dist + Math.abs(x[i] - y[i]);
+        }
+        return dist;
+    }
+    
+    public double manhattanDistance(double[] x1,double[] x2,int numOfDocs){
+        double res = 0.0;
+        for(int i=0;i<numOfDocs;i++){
+            res += Math.abs(x1[i]-x2[i]);
+        }
+        System.out.println("inside manhattanDiatance: "+res);
+        return res;
+    }
+    
     /*
      *   Computes the pagerank of each document.
      */
@@ -162,14 +178,81 @@ public class PageRank{
          update the values and check with epsilon blah blah
          if its less than epsilon then, its the page rank
          so in the transposition matrix we put the computed values
-         
-         
-         
          */
+        //calculate probability matrix
         
+        double[][] g = new double[numberOfDocs][numberOfDocs];
+        Boolean check=true;
+        double[] x = new double[numberOfDocs];
+        double[] x1 = new double[numberOfDocs];
+        double dist;
+        for(int i = 0; i < numberOfDocs; i++){//to calculate g
+            for(int j = 0; j < numberOfDocs; j++){
+                
+                if(out[i] == 0){
+                    g[i][j] = 1/(double)numberOfDocs;//jump no out links
+                }
+                else{
+                    if(link.get(i).containsKey(j) && (link.get(i)).get(j)){//link have
+                        g[i][j] = ((1-BORED)*1/(double)out[i])+((BORED)*1/(double)numberOfDocs);
+                        //System.out.println("link have");
+                    }
+                    else {
+                          g[i][j] = (BORED)*1/(double)numberOfDocs;//bored jump, cause otherwise cant go from i to j, no link
+                        //System.out.println("link no");
+                    }
+                }
+            }
+            x[i]=0.0;
+        }
+        x[0]=1.0;
+        int counter=0;
+        Boolean converged = false;
+        while(counter < MAX_NUMBER_OF_ITERATIONS){
+            System.out.println("iteration="+counter);
+            for(int i = 0; i < numberOfDocs; i++){
+                x1[i] = 0.0;
+                for(int j = 0; j < numberOfDocs; j++){
+                    x1[i] = x1[i] + (x[j] * g[j][i]);
+                }
+               // System.out.println(x1[i]+" ");
+            }
+            double res=0.0;
+            for(int i = 0; i < numberOfDocs; i++){
+                 res=res+Math.abs(x[i]-x1[i]);
+            }
+            System.out.println("res="+res);
+            if(res < EPSILON){
+                converged = true;
+            }
+            if(converged){
+                break;
+            }
+            for(int i = 0; i < numberOfDocs; i++){
+                x[i] = x1[i];
+            }
+            counter++;
+        }
+        final double[] ranked = new double[numberOfDocs];
+        Integer[] indices = new Integer[numberOfDocs];
+        for (int i = 0; i < numberOfDocs; i++) {
+            ranked[i] = x[i];
+            indices[i] = i;
+        }
+        Arrays.sort(indices, new Comparator<Integer>() {
+            @Override
+            public int compare(final Integer o1, final Integer o2) {
+                return Double.compare(ranked[o1], ranked[o2]);
+            }
+        });
+        for (int i = 0; i < 50; i++) {
+            int idx = indices[indices.length - i - 1];
+            System.out.println((i + 1) + ": " + docName[idx] + " "
+                               + ranked[idx]);
+        }
     }
-
-
+    
+    
     /* --------------------------------------------- */
 
 
